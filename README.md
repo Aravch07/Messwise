@@ -2,7 +2,7 @@
 
 **Your meal, minus the wait.**
 
-[Open MessWise](https://messwise-mocha.vercel.app) | [GitHub](https://github.com/Aravch07/Messwise)
+[Student login](https://messwise-mocha.vercel.app) | [Staff login](https://messwise-mocha.vercel.app/staff) | [GitHub](https://github.com/Aravch07/Messwise)
 
 A hostel dining platform inspired by SeatWise, with student accounts, numbered dining passes, a staff control room and food planning based on recorded demand. Built with a responsive dark interface, lime and lavender accents, mobile navigation, visible service states and transparent food accounting.
 
@@ -34,7 +34,7 @@ Set ADMIN_PASSWORD to a private staff password and SESSION_SECRET to a random st
 npm run dev
 ```
 
-Open http://localhost:3000. Create student accounts through Student sign in. Open Mess control for staff access. Add ready portions before calling students. Use two separate accounts to demonstrate queue progression.
+Open http://localhost:3000. Create student accounts through Student sign in. Staff use the separate /staff portal; students are never shown staff navigation. Add ready portions before calling students. Use two separate accounts to demonstrate queue progression.
 
 ## Vercel deployment
 
@@ -87,3 +87,13 @@ Student email ownership and hostel membership are not verified. Password reset, 
 Production is deployed on Vercel in Singapore. Live checks verified public page/assets, staff authentication, concurrent persistent writes and readback. Eleven local tests pass, including SDK error identity and stale-read suppression. Browser visual QA remains unverified in this environment.
 
 Queue conflicts retry using the SDK error class rather than Error.name, with a short randomized delay. Blob reads no longer wait behind unrelated requests in a function instance. Successful actions update the interface immediately from the response; single-flight one-second polling discards stale in-flight reads and refreshes on window focus.
+
+## Phase 4 prototype and role access
+
+The landing page now requires student login before dining data is returned. Staff sign in separately at /staff using the existing staff password. The API requires the staff portal context AND a valid server-signed staff session for administrative operations; hiding a navigation item alone is not the security control. Student responses exclude kitchen logs, staff activity, team records, and other participants' feedback.
+
+Staff Prototype studio maps the six 20-mark rubric criteria (120 total), records team details and the original problem/selected solution, tracks real user task outcomes and timings, and documents before-and-after improvements. Students can voluntarily submit task feedback after signing in. Multiple tasks from one account retain one participant code. No user validation results, photographs, videos, or marks are fabricated.
+
+Collect genuine validation from 3-5 distinct relevant users, attach initial and final prototype photos and process evidence, record a 2-3 minute demonstration, and enter the team's original statement and actual contributions. The studio exports an editable-content HTML submission report, printable HTML presentation slides, and JSON project records. Open the HTML files in a browser and print to PDF if required. Faculty assign marks; the tracker does not guarantee a score.
+
+The challenge date from the supplied brief is 24 November 2026. The final presentation and validation date is 30 November 2026. The studio includes the complete two-hour activity plan and a 150-second demo storyboard.
