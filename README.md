@@ -20,7 +20,7 @@ Each account can have one active token and collect each meal once per day. The k
 
 ## Run locally
 
-Node.js 22 or newer. No package installation or build step is required.
+Node.js 22 or newer. Run npm install to install the Vercel Blob storage SDK. No build step is required.
 
 ```powershell
 Copy-Item .env.example .env.local
@@ -47,9 +47,9 @@ Set these private server environment variables before deploying:
 | UPSTASH_REDIS_REST_URL | Shared Redis REST endpoint |
 | UPSTASH_REDIS_REST_TOKEN | Private Redis credential |
 
-Connect a Redis database through Vercel Marketplace or use an existing Upstash database. The production app refuses to process live state without shared Redis and a configured signing secret. A local file is used only outside Vercel. Never put environment values in public JavaScript or commit them to GitHub.
+Production uses the connected private Vercel Blob store in Singapore. Set BLOB_STORE_ID from that connection; Vercel supplies short-lived OIDC credentials automatically. Reads bypass the CDN, and writes require the exact ETag of the state that was read. A concurrent change triggers a retry. Upstash Redis remains an optional alternative. The production app refuses to process live state without shared storage and a configured signing secret. A local file is used only outside Vercel. Never put environment values in public JavaScript or commit them to GitHub.
 
-Vercel routes /api/* to api/index.js. Public assets are served from public/. The runtime uses only Node built-ins and fetch; there is no dependency supply chain or build process to maintain.
+Vercel routes /api/* to api/index.js. Public assets are served from public/. The API uses Node built-ins, fetch and the official Vercel Blob SDK.
 
 ## Architecture
 
@@ -57,7 +57,7 @@ Vercel routes /api/* to api/index.js. Public assets are served from public/. The
 - **API:** Node serverless handler with server-side role checks and input validation.
 - **Identity:** scrypt-hashed student passwords with individual random salts; signed expiring HttpOnly cookies. Passwords and identity records are excluded from public API responses. Cookies are Secure in production.
 - **Abuse controls:** shared ten-minute authentication attempt limits using a hashed network identifier. No raw IP address is stored.
-- **Concurrency:** Redis compare-and-swap Lua script retries competing writes across Vercel instances. Local storage serializes requests and atomically renames file writes.
+- **Concurrency:** private Vercel Blob conditional writes use ETag-based optimistic concurrency and uncached origin reads across instances. Optional Redis uses a compare-and-swap Lua script. Local storage serializes requests and atomically renames file writes.
 - **Accounting:** prepared portions reconcile to served meals, called reservations, ready food and recorded waste. Day rollover records unaccounted food explicitly instead of reporting it as served or wasted.
 - **Audit:** the latest 300 action records, visible only to staff. The dashboard displays the latest 20.
 - **Delivery:** security headers, a restricted Content Security Policy, and GitHub Actions checks on pushes and pull requests.
