@@ -14,7 +14,7 @@ A hostel dining platform inspired by SeatWise, with student accounts, numbered d
 | View daily breakfast, lunch and dinner menus | Edit menus, notices and serving meal |
 | Confirm which meals they plan to eat | See demand confirmations and preparation estimates |
 | Join a numbered queue and see people ahead | Call next or choose a specific token |
-| Follow live serving updates every three seconds | Pause service while food is unavailable |
+| Follow live serving updates every second | Pause service while food is unavailable |
 | Keep the same queue place after refresh or sign-in | Add ready portions, serve or skip called tokens |
 | Cancel a waiting token | Record waste, export CSV and inspect activity |
 
@@ -84,4 +84,6 @@ Tests cover FIFO order, stock limits, specific-token calling, skipped portion re
 
 Student email ownership and hostel membership are not verified. Password reset, staff invitation workflows, multiple messes, background push notifications and institutional SSO are not implemented. Keep the page open to receive serving updates. The single shared state key prioritizes simple correctness for a college demonstration; it needs load testing and partitioned storage before a large campus rollout.
 
-Production is deployed on Vercel in Singapore. Live checks verified public page/assets, staff authentication, concurrent persistent writes and readback. Seven local tests pass. Browser visual QA remains unverified in this environment.
+Production is deployed on Vercel in Singapore. Live checks verified public page/assets, staff authentication, concurrent persistent writes and readback. Eleven local tests pass, including SDK error identity and stale-read suppression. Browser visual QA remains unverified in this environment.
+
+Queue conflicts retry using the SDK error class rather than Error.name, with a short randomized delay. Blob reads no longer wait behind unrelated requests in a function instance. Successful actions update the interface immediately from the response; single-flight one-second polling discards stale in-flight reads and refreshes on window focus.
