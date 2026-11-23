@@ -22,6 +22,7 @@ export default async function handler(req,res){
  if(req.method!=='POST'){res.statusCode=405;return res.end(JSON.stringify({error:'Method not allowed'}));}
  if(req.headers.origin&&new URL(req.headers.origin).host!==req.headers.host)throw Error('Invalid origin');
  let b=req.body;if(!b){let raw='';for await(const chunk of req){raw+=chunk;if(raw.length>10000)throw Error('Request too large');}b=JSON.parse(raw||'{}');}if(typeof b==='string')b=JSON.parse(b);if(!b||typeof b!=='object'||Array.isArray(b)||JSON.stringify(b).length>10000)throw Error('Invalid request');
+ if(b.action==='login'&&req.headers['x-messwise-portal']!=='staff'){res.statusCode=403;return res.end('{"error":"Staff portal required"}');}
  if(['signup','signin','login'].includes(b.action))await limit(req);
  if(b.action==='signup'||b.action==='signin'){
  const email=String(b.email||'').trim().toLowerCase(),password=String(b.password||'');if(!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)||email.length>150)throw Error('Enter a valid email address');if(password.length<10||password.length>128)throw Error('Use a password between 10 and 128 characters');
