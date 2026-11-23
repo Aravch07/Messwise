@@ -2,6 +2,8 @@
 
 **Your meal, minus the wait.**
 
+[Open MessWise](https://messwise-mocha.vercel.app) | [GitHub](https://github.com/Aravch07/Messwise)
+
 A hostel dining platform inspired by SeatWise, with student accounts, numbered dining passes, a staff control room and food planning based on recorded demand. Built with a responsive dark interface, lime and lavender accents, mobile navigation, visible service states and transparent food accounting.
 
 ## What works
@@ -82,4 +84,4 @@ Tests cover FIFO order, stock limits, specific-token calling, skipped portion re
 
 Student email ownership and hostel membership are not verified. Password reset, staff invitation workflows, multiple messes, background push notifications and institutional SSO are not implemented. Keep the page open to receive serving updates. The single shared state key prioritizes simple correctness for a college demonstration; it needs load testing and partitioned storage before a large campus rollout.
 
-Browser visual QA and live Redis/Vercel checks must be completed in the deployment environment. Automated local API and engine checks pass; that does not claim the public deployment is already configured.
+Production is deployed on Vercel in Singapore. Live checks verified public page/assets, staff authentication, concurrent persistent writes and readback. Seven local tests pass. Browser visual QA remains unverified in this environment.

@@ -12,6 +12,6 @@
     "node": ">=22"
   },
   "dependencies": {
-    "@vercel/blob": "latest"
+    "@vercel/blob": "2.9.0"
   }
 }
