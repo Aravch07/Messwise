@@ -31,7 +31,7 @@ export default async function handler(req,res){
  if(b.action==='studentLogout'){res.setHeader('Set-Cookie',authCookie('mw_student','',0));return res.end('{"ok":true}');}
  if(b.action==='login'){if(req.headers['x-messwise-portal']!=='staff'){res.statusCode=403;return res.end('{"error":"Staff portal required"}');}if(!process.env.ADMIN_PASSWORD)throw Error('Set ADMIN_PASSWORD in the server environment first');if(!equal(String(b.password||''),process.env.ADMIN_PASSWORD))throw Error('Incorrect admin password');res.setHeader('Set-Cookie',authCookie('mw_admin',signed(String(Date.now()+8*3600000))));return res.end('{"ok":true}');}
  if(b.action==='logout'){res.setHeader('Set-Cookie',authCookie('mw_admin','',0));return res.end('{"ok":true}');}
- if(['join','leave','attend','feedback'].includes(b.action)){if(!uid){res.statusCode=401;return res.end('{"error":"Sign in as a student to save your place"}');}}
+ if(['join','leave','attend','feedback','rating'].includes(b.action)){if(!uid){res.statusCode=401;return res.end('{"error":"Sign in as a student to save your place"}');}}
  else if(!admin){res.statusCode=403;return res.end('{"error":"Admin sign-in required"}');}
  if(['project','feedback','validation','improvement','evidence'].includes(b.action)){const fn=s=>{prototypeChange(s,b.action,b,uid);return view(s,uid,admin);};fn.mutate=true;return res.end(JSON.stringify(await store(fn)));}
  const fn=s=>view(change(s,b.action,b,uid),uid,admin);fn.mutate=true;const data=await store(fn);res.end(JSON.stringify(data));
